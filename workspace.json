@@ -2,7 +2,6 @@
   "version": 2,
   "projects": {
     "auth": "services/auth",
-    "books": "services/books",
     "core": "services/core",
     "db": "libs/db",
     "http": "libs/http",

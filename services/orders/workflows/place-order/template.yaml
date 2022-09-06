@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Request response
+
+  SAM Template for place order 
+
+
+Resources:
+##########################################################################
+#   STEP FUNCTION                                                        #
+##########################################################################
+
+PlaceOrderStateMachine:
+  Type: AWS::Serverless::StateMachine
+  Properties:
+    DefinitionUri: index.asl.json
+    Role: arn:aws:iam::123456123456:role/service-role/my-sample-role
+    Tracing:
+      Enabled: true
+    DefinitionSubstitutions:
+      MyFunctionArn: !GetAtt MyFunction.Arn
+      MyDDBTable: !Ref TransactionTable
+    Type: Standard
+
+Outputs:
+  syncronousApiStateMachine:
+    Description: "state machine ARN"
+    Value: !Ref PlaceOrderStateMachine
+
+  API:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ RESTApiforSyncWF}.execute-api.${AWS::Region}.amazonaws.com/Prod"
