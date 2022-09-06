@@ -41,7 +41,7 @@ export default async function (tree: Tree, schema: Schema) {
 
   const n = names(schema.name);
   const serverlessPath = joinPathFragments(`services/${schema.project}`, 'serverless.ts');
-  const serverless = tree.read(serverlessPath).toString()
+  const serverless = tree.read(serverlessPath)?.toString()
 
   generateFiles(tree, joinPathFragments(__dirname, './files'), serviceSource, {
     ...schema,

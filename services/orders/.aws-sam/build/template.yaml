@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'sam-app
+
+  Sample SAM Template for sam-app
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+Resources:
+  OrdersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: OrdersFunction
+      Handler: services/orders/functions/index.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        GoToStep2:
+          Type: Api
+          Properties:
+            Path: /orders/client/go-to-step4
+            Method: post
+        GoToStep3:
+          Type: Api
+          Properties:
+            Path: /orders/client/go-to-step3
+            Method: post
+    Metadata:
+      SamResourceId: OrdersFunction
+Outputs:
+  OrdersApi:
+    Description: API Gateway endpoint URL for Prod stage for Orders
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/orders/
+  OrdersFunction:
+    Description: Orders Function ARN
+    Value:
+      Fn::GetAtt:
+      - OrdersFunction
+      - Arn
+  OrdersIamRole:
+    Description: Implicit IAM Role created for Orders function
+    Value:
+      Fn::GetAtt:
+      - OrdersFunctionRole
+      - Arn

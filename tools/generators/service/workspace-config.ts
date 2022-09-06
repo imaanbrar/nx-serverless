@@ -20,13 +20,13 @@ export const addWorkspaceConfig = (
     sourceRoot: `${serviceRoot}/src`,
     targets: {
       build: {
-        ...buildRunCommandConfig(serviceRoot, 'sls package'),
+        ...buildRunCommandConfig(serviceRoot, 'tsc && sam build'),
       },
       serve: {
-        ...buildRunCommandConfig(serviceRoot, 'sls offline start'),
+        ...buildRunCommandConfig(serviceRoot, 'tsc && sam local start-api -d 8065'),
       },
       deploy: {
-        ...buildRunCommandConfig(serviceRoot, 'sls deploy --verbose'),
+        ...buildRunCommandConfig(serviceRoot, 'sam deploy'),
         dependsOn: [
           {
             target: 'deploy',
@@ -35,7 +35,7 @@ export const addWorkspaceConfig = (
         ],
       },
       remove: {
-        ...buildRunCommandConfig(serviceRoot, 'sls remove'),
+        ...buildRunCommandConfig(serviceRoot, 'sam delete'),
       },
       lint: {
         executor: '@nrwl/linter:eslint',

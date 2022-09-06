@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for sam-app
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  <%= name %>Function:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: built
+      Handler: services/<%= name %>/functions/index.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        GoToStep2:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /<%= name %>/client/go-to-step2
+            Method: post 
+            
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  <%= name %>Api:
+    Description: "API Gateway endpoint URL for Prod stage for <%= name %>"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/<%= name %>/"
+  <%= name %>Function:
+    Description: "<%= name %> Function ARN"
+    Value: !GetAtt <%= name %>Function.Arn
+  <%= name %>IamRole:
+    Description: "Implicit IAM Role created for <%= name %> function"
+    Value: !GetAtt <%= name %>FunctionRole.Arn

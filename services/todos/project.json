@@ -8,7 +8,7 @@
       "options": {
         "cwd": "services/todos",
         "color": true,
-        "command": "sls package"
+        "command": "sam build"
       }
     },
     "serve": {
@@ -16,7 +16,7 @@
       "options": {
         "cwd": "services/todos",
         "color": true,
-        "command": "sls offline start"
+        "command": "sam local start-api -d 8065"
       }
     },
     "deploy": {
@@ -24,7 +24,7 @@
       "options": {
         "cwd": "services/todos",
         "color": true,
-        "command": "sls deploy --verbose"
+        "command": "sam deploy"
       },
       "dependsOn": [
         {
@@ -38,7 +38,7 @@
       "options": {
         "cwd": "services/todos",
         "color": true,
-        "command": "sls remove"
+        "command": "sam delete"
       }
     },
     "lint": {
