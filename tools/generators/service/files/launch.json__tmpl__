@@ -3,13 +3,11 @@
         {
             "type": "node",
             "request": "attach",
-            "name": "Attach to SAM CLI",
+            "name": "Attach to SAM CLI <%= name %>",
             "address": "localhost",
             "port": 3000,
             "localRoot": "${workspaceRoot}/dist/out-tsc",
             "remoteRoot": "/var/task",
-            "protocol": "inspector",
-            "stopOnEntry": false,      
             "outFiles": ["${workspaceFolder}/dist/out-tsc/**/*.js"],
             "preLaunchTask": "build service/<%= name %>"
         },
