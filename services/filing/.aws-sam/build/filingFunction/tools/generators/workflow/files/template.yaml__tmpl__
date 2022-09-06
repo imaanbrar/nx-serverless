@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Request response
+
+  SAM Template for <%= name %>
+
+
+Resources:
+##########################################################################
+#   STEP FUNCTION                                                        #
+##########################################################################
+
+<%= name %>StateMachine:
+  Type: AWS::Serverless::StateMachine
+  Properties:
+    DefinitionUri: index.asl.json
+    Role: arn:aws:iam::123456123456:role/service-role/my-sample-role
+    Events:
+      ApiEvent:
+      Type: Api
+      Properties:
+        Method: post
+        Path: /<%= service %>/<%= name %>
+        RestApiId: 
+          Ref: MyApi
+    Tracing:
+      Enabled: true
+    DefinitionSubstitutions:
+      MyFunctionArn: !GetAtt MyFunction.Arn
+    Type: Standard
+
+Outputs:
+  syncronousApiStateMachine:
+    Description: "state machine ARN"
+    Value: !Ref Place<%= name %>StateMachine
+
+  API:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ RESTApiforSyncWF}.execute-api.${AWS::Region}.amazonaws.com/Prod"

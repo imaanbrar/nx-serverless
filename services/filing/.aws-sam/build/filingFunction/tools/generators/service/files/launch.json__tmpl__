@@ -1,0 +1,51 @@
+{
+    "configurations": [
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to SAM CLI <%= name %>",
+            "address": "localhost",
+            "port": 3000,
+            "localRoot": "${workspaceRoot}/dist/out-tsc",
+            "remoteRoot": "/var/task",
+            "outFiles": ["${workspaceFolder}/dist/out-tsc/**/*.js"],
+            "preLaunchTask": "build service/<%= name %>"
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "lambda:<%= name %> (nodejs12.x)",
+            "sam": {
+                "buildArguments": ["--beta-features"],
+                "localArguments": ["-e", "${workspaceFolder}/services/<%= name %>/events/event.json"]
+            },
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "services/<%= name %>/template.yaml",
+                "logicalId": "<%= name %>Function"
+            },
+            "lambda": {
+                "payload": {},
+                "environmentVariables": {}
+            },
+            "preLaunchTask": "build service/<%= name %>"
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "API lambda:<%= name %>Function (nodejs12.x)",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "services/<%= name %>/template.yaml",
+                "logicalId": "<%= name %>Function"
+            },
+            "api": {
+                "path": "/<%= name %>",
+                "httpMethod": "get",
+                "payload": {
+                    "json": {}
+                }
+            }
+        }
+    ]
+}

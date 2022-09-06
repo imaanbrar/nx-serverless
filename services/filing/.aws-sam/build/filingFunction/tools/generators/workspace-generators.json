@@ -1,0 +1,68 @@
+{
+  "name": "workspace-generators",
+  "version": "1.0",
+  "generators": {
+    "github-workflow": {
+      "factory": "./github-workflow",
+      "schema": "./github-workflow/schema.json",
+      "description": "Schematic github-workflow"
+    },
+    "handler": {
+      "factory": "./handler",
+      "schema": "./handler/schema.json",
+      "description": "Schematic handler"
+    },
+    "http-handler": {
+      "factory": "./http-handler",
+      "schema": "./http-handler/schema.json",
+      "description": "Schematic http-handler"
+    },
+    "model": {
+      "factory": "./model",
+      "schema": "./model/schema.json",
+      "description": "Schematic model"
+    },
+    "service": {
+      "factory": "./service",
+      "schema": "./service/schema.json",
+      "description": "Schematic service"
+    },
+    "workflow": {
+      "factory": "./workflow",
+      "schema": "./workflow/schema.json",
+      "description": "Schematic workflow"
+    }
+  },
+  "schematics": {
+    "github-workflow": {
+      "factory": "./github-workflow",
+      "schema": "./github-workflow/schema.json",
+      "description": "Schematic github-workflow"
+    },
+    "handler": {
+      "factory": "./handler",
+      "schema": "./handler/schema.json",
+      "description": "Schematic handler"
+    },
+    "http-handler": {
+      "factory": "./http-handler",
+      "schema": "./http-handler/schema.json",
+      "description": "Schematic http-handler"
+    },
+    "model": {
+      "factory": "./model",
+      "schema": "./model/schema.json",
+      "description": "Schematic model"
+    },
+    "service": {
+      "factory": "./service",
+      "schema": "./service/schema.json",
+      "description": "Schematic service"
+    },
+    "workflow": {
+      "factory": "./workflow",
+      "schema": "./workflow/schema.json",
+      "description": "Schematic workflow"
+    }
+  }
+}
