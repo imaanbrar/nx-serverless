@@ -1,4 +1,4 @@
-name: <%= name %>ServicePipeline
+name: filingServicePipeline
 
 on:
   push:
@@ -6,26 +6,26 @@ on:
       - 'main'
       - 'feature**'
     paths:
-      - services/<%= name %>/**
-      - .github/workflows/<%= name %>Service.yaml
+      - services/filing/**
+      - .github/workflows/filingService.yaml
 env:
   PIPELINE_USER_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   PIPELINE_USER_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  SAM_TEMPLATE: services/<%= name %>/template.yaml
-  DEV_STACK_NAME: pcf-demo-serverless-dev-<%= name %>-service
-  DEV_PIPELINE_EXECUTION_ROLE: <%= dev_pipeline_execution_role %>
-  DEV_CLOUDFORMATION_EXECUTION_ROLE: <%= dev_cloudformation_execution_role %>
-  DEV_ARTIFACTS_BUCKET: <%= dev_artifacts_bucket %>
+  SAM_TEMPLATE: services/filing/template.yaml
+  DEV_STACK_NAME: pcf-demo-serverless-dev-filing-service
+  DEV_PIPELINE_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-dev-pipe-PipelineExecutionRole-XRX9SFC72IP7
+  DEV_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionR-F4DVVPL3YBXN
+  DEV_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-artifactsbucket-jm2ie85jtwor
   DEV_REGION: ca-central-1
-  UAT_STACK_NAME: pcf-demo-serverless-uat-<%= name %>-service
-  UAT_PIPELINE_EXECUTION_ROLE: <%= uat_pipeline_execution_role %>
-  UAT_CLOUDFORMATION_EXECUTION_ROLE: <%= uat_cloudformation_execution_role %>
-  UAT_ARTIFACTS_BUCKET: <%= uat_artifacts_bucket %>
+  UAT_STACK_NAME: pcf-demo-serverless-uat-filing-service
+  UAT_PIPELINE_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-uat-pipe-PipelineExecutionRole-KXTTTYXQMIF
+  UAT_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-uat-p-CloudFormationExecutionR-1EWZLOSJ99LR4
+  UAT_ARTIFACTS_BUCKET: aws-sam-cli-managed-uat-pipeline-artifactsbucket-ui767vydxwdi
   UAT_REGION: ca-central-1
-  PROD_STACK_NAME: <%= name %>
-  PROD_PIPELINE_EXECUTION_ROLE: <%= prod_pipeline_execution_role %>
-  PROD_CLOUDFORMATION_EXECUTION_ROLE: <%= prod_cloudformation_execution_role %>
-  PROD_ARTIFACTS_BUCKET: <%= prod_artifacts_bucket %>
+  PROD_STACK_NAME: filing
+  PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-prod-pip-PipelineExecutionRole-2YN6F6WSDFPJ
+  PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-prod-CloudFormationExecutionR-PG8D6TH1Y61K
+  PROD_ARTIFACTS_BUCKET: aws-sam-cli-managed-prod-pipeline-artifactsbucket-1gzcns30go8le
   PROD_REGION: ca-central-1 
 
 jobs: 

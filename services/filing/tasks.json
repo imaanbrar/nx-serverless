@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build service/filing",
+      "type": "shell",
+      "command": "tsc",
+      "args": ["-p", "${workspaceRoot}/services/filing"]
+    }
+  ]
+}

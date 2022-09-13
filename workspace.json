@@ -4,7 +4,8 @@
     "auth": "services/auth",
     "core": "services/core",
     "db": "libs/db",
-     "http": "libs/http",
+    "filing": "services/filing",
+    "http": "libs/http",
     "orders": "services/orders",
     "todos": "services/todos",
     "users": "services/users"

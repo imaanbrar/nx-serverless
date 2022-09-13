@@ -1,0 +1,61 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "services/filing/src",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services/filing",
+        "color": true,
+        "command": "tsc && sam build"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services/filing",
+        "color": true,
+        "command": "tsc && sam local start-api -d 8065"
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services/filing",
+        "color": true,
+        "command": "sam deploy"
+      },
+      "dependsOn": [
+        {
+          "target": "deploy",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "remove": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services/filing",
+        "color": true,
+        "command": "sam delete"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["services/filing/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/services/filing"],
+      "options": {
+        "jestConfig": "services/filing/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["service"],
+  "implicitDependencies": ["core"]
+}

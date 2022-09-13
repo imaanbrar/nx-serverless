@@ -11,7 +11,8 @@
         "$source": "argv",
         "index": 0
       }
-    }
+    },
+    "invocation_type": { "enum": ["API", "SQS"] }
   },
   "required": [
     "name"

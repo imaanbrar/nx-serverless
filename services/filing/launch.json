@@ -1,0 +1,54 @@
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to SAM CLI filing",
+      "address": "localhost",
+      "port": 3000,
+      "localRoot": "${workspaceRoot}/dist/out-tsc",
+      "remoteRoot": "/var/task",
+      "outFiles": ["${workspaceFolder}/dist/out-tsc/**/*.js"],
+      "preLaunchTask": "build service/filing"
+    },
+    {
+      "type": "aws-sam",
+      "request": "direct-invoke",
+      "name": "lambda:filing (nodejs12.x)",
+      "sam": {
+        "buildArguments": ["--beta-features"],
+        "localArguments": [
+          "-e",
+          "${workspaceFolder}/services/filing/events/event.json"
+        ]
+      },
+      "invokeTarget": {
+        "target": "template",
+        "templatePath": "services/filing/template.yaml",
+        "logicalId": "filingFunction"
+      },
+      "lambda": {
+        "payload": {},
+        "environmentVariables": {}
+      },
+      "preLaunchTask": "build service/filing"
+    },
+    {
+      "type": "aws-sam",
+      "request": "direct-invoke",
+      "name": "API lambda:filingFunction (nodejs12.x)",
+      "invokeTarget": {
+        "target": "api",
+        "templatePath": "services/filing/template.yaml",
+        "logicalId": "filingFunction"
+      },
+      "api": {
+        "path": "/filing",
+        "httpMethod": "get",
+        "payload": {
+          "json": {}
+        }
+      }
+    }
+  ]
+}
