@@ -118,8 +118,9 @@ jobs:
           node-version: 12
   
       - name: install typescript
-        run: npm install -g typescript
-      - name: compline typescript
+        run: npm install -g typescript && npm install
+
+      - name: compile typescript
         run: tsc -p services/filing
 
       - name: Build resources
