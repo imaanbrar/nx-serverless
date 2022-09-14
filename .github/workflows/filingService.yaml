@@ -136,16 +136,16 @@ jobs:
           name: packaged-dev.yaml
           path: packaged-dev.yaml
 
-      - name: Assume the testing pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.UAT_REGION }}
-          role-to-assume: ${{ env.UAT_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: uat-packaging
-          role-duration-seconds: 3600
-          role-skip-session-tagging: true
+      # - name: Assume the testing pipeline user role
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.UAT_REGION }}
+      #     role-to-assume: ${{ env.UAT_PIPELINE_EXECUTION_ROLE }}
+      #     role-session-name: uat-packaging
+      #     role-duration-seconds: 3600
+      #     role-skip-session-tagging: true
 
       # - name: Upload artifacts to uat artifact buckets
       #   run: |
