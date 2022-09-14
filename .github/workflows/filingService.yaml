@@ -124,40 +124,40 @@ jobs:
           role-duration-seconds: 3600
           role-skip-session-tagging: true
 
-      - name: Upload artifacts to testing artifact buckets
+      - name: Upload artifacts to dev artifact buckets
         run: |
           sam package \
-            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
-            --region ${TESTING_REGION} \
-            --output-template-file packaged-testing.yaml
+            --s3-bucket ${DEV_ARTIFACTS_BUCKET} \
+            --region ${DEV_REGION} \
+            --output-template-file packaged-dev.yaml
 
       - uses: actions/upload-artifact@v2
         with:
-          name: packaged-testing.yaml
-          path: packaged-testing.yaml
+          name: packaged-dev.yaml
+          path: packaged-dev.yaml
 
       - name: Assume the testing pipeline user role
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.TESTING_REGION }}
-          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: testing-packaging
+          aws-region: ${{ env.UAT_REGION }}
+          role-to-assume: ${{ env.UAT_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: uat-packaging
           role-duration-seconds: 3600
           role-skip-session-tagging: true
 
-      - name: Upload artifacts to testing artifact buckets
+      - name: Upload artifacts to uat artifact buckets
         run: |
           sam package \
-            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
-            --region ${TESTING_REGION} \
-            --output-template-file packaged-testing.yaml
+            --s3-bucket ${UAT_ARTIFACTS_BUCKET} \
+            --region ${UAT_REGION} \
+            --output-template-file packaged-uat.yaml
 
       - uses: actions/upload-artifact@v2
         with:
-          name: packaged-testing.yaml
-          path: packaged-testing.yaml
+          name: packaged-uat.yaml
+          path: packaged-uat.yaml
 
       - name: Assume the prod pipeline user role
         uses: aws-actions/configure-aws-credentials@v1
