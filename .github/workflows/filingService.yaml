@@ -127,7 +127,7 @@ jobs:
       - name: Upload artifacts to dev artifact buckets
         run: |
           sam package \
-            --template ${SAM_TEMPLATE}
+            --template ${SAM_TEMPLATE} \
             --s3-bucket ${DEV_ARTIFACTS_BUCKET} \
             --region ${DEV_REGION} \
             --output-template-file packaged-dev.yaml
