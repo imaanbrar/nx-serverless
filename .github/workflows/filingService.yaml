@@ -15,7 +15,7 @@ env:
   DEV_STACK_NAME: pcf-demo-serverless-dev-filing-service
   DEV_PIPELINE_EXECUTION_ROLE: arn:aws:iam::812042964529:role/goa-iam-role-cicd-pcff-dev-pipeline-role
   DEV_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionR-F4DVVPL3YBXN
-  DEV_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-artifactsbucket-jm2ie85jtwor
+  DEV_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-artifactsbucket- 
   DEV_REGION: ca-central-1
   UAT_STACK_NAME: pcf-demo-serverless-uat-filing-service
   UAT_PIPELINE_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-uat-pipe-PipelineExecutionRole-KXTTTYXQMIF
@@ -127,6 +127,7 @@ jobs:
       - name: Upload artifacts to dev artifact buckets
         run: |
           sam package \
+            --template ${SAM_TEMPLATE} \
             --s3-bucket ${DEV_ARTIFACTS_BUCKET} \
             --region ${DEV_REGION} \
             --output-template-file packaged-dev.yaml
