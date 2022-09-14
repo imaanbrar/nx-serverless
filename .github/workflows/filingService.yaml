@@ -147,40 +147,40 @@ jobs:
           role-duration-seconds: 3600
           role-skip-session-tagging: true
 
-      - name: Upload artifacts to uat artifact buckets
-        run: |
-          sam package \
-            --s3-bucket ${UAT_ARTIFACTS_BUCKET} \
-            --region ${UAT_REGION} \
-            --output-template-file packaged-uat.yaml
+      # - name: Upload artifacts to uat artifact buckets
+      #   run: |
+      #     sam package \
+      #       --s3-bucket ${UAT_ARTIFACTS_BUCKET} \
+      #       --region ${UAT_REGION} \
+      #       --output-template-file packaged-uat.yaml
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: packaged-uat.yaml
-          path: packaged-uat.yaml
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: packaged-uat.yaml
+      #     path: packaged-uat.yaml
 
-      - name: Assume the prod pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.PROD_REGION }}
-          role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: prod-packaging
-          role-duration-seconds: 3600
-          role-skip-session-tagging: true
+      # - name: Assume the prod pipeline user role
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.PROD_REGION }}
+      #     role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
+      #     role-session-name: prod-packaging
+      #     role-duration-seconds: 3600
+      #     role-skip-session-tagging: true
 
-      - name: Upload artifacts to production artifact buckets
-        run: |
-          sam package \
-            --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
-            --region ${PROD_REGION} \
-            --output-template-file packaged-prod.yaml
+      # - name: Upload artifacts to production artifact buckets
+      #   run: |
+      #     sam package \
+      #       --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
+      #       --region ${PROD_REGION} \
+      #       --output-template-file packaged-prod.yaml
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: packaged-prod.yaml
-          path: packaged-prod.yaml
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: packaged-prod.yaml
+      #     path: packaged-prod.yaml
 
   deploy-dev:
     if: github.ref == 'refs/heads/main'
