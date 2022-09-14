@@ -116,11 +116,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-          
-      - name: tsc
-        uses: iCrawl/action-tsc@v1
-        with:
-          project: services/filing
+  
+      - name: install typescript
+        run: npm install -g typescript
+      - name: compline typescript
+        run: tsc -p services/filing
 
       - name: Build resources
         run: sam build --template ${SAM_TEMPLATE} --use-container
