@@ -111,8 +111,10 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v1
 
-      - name: tsc -p services/filing
+      - name: tsc
         uses: iCrawl/action-tsc@v1
+        with:
+          project: services/filing
 
       - name: Build resources
         run: sam build --template ${SAM_TEMPLATE} --use-container
