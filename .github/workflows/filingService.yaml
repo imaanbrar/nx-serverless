@@ -75,6 +75,7 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
+    
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v1
@@ -109,6 +110,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v1
+
+      - name: tsc -p services/filing
+        uses: iCrawl/action-tsc@v1
 
       - name: Build resources
         run: sam build --template ${SAM_TEMPLATE} --use-container
