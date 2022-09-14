@@ -15,12 +15,6 @@ PlaceOrderStateMachine:
   Type: AWS::Serverless::StateMachine
   Properties:
     DefinitionUri: index.asl.json
-    Role: arn:aws:iam::123456123456:role/service-role/my-sample-role
-    Tracing:
-      Enabled: true
-    DefinitionSubstitutions:
-      MyFunctionArn: !GetAtt MyFunction.Arn
-      MyDDBTable: !Ref TransactionTable
     Type: Standard
 
 Outputs:

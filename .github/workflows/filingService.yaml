@@ -13,7 +13,7 @@ env:
   PIPELINE_USER_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   SAM_TEMPLATE: services/filing/template.yaml
   DEV_STACK_NAME: pcf-demo-serverless-dev-filing-service
-  DEV_PIPELINE_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-dev-pipe-PipelineExecutionRole-XRX9SFC72IP7
+  DEV_PIPELINE_EXECUTION_ROLE: arn:aws:iam::812042964529:role/goa-iam-role-cicd-pcff-dev-pipeline-role
   DEV_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::812042964529:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionR-F4DVVPL3YBXN
   DEV_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-artifactsbucket-jm2ie85jtwor
   DEV_REGION: ca-central-1
