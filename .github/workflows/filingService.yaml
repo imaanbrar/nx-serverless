@@ -116,8 +116,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-      - name: yarn install
-        run: yarn install
+          
       - name: tsc
         uses: iCrawl/action-tsc@v1
         with:
