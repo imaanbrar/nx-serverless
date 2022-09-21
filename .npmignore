@@ -1,10 +1,32 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
 /tmp
 /out-tsc
-**/.aws-sam
+/.github
+/.husky
+/.vscode
+/apps
+/libs
+/services
+/tools
+.editorconfig
+.prettierignore
+.prettierignore
+.prettierignore
+.prettierrc
+.eslintrc.json
+docker-compose.yaml
+jest.config.js
+jest.preset.js
+LICENSE
+nx.json
+package-lock.json
+plugins.js
+README.md
+serverless.base.ts
+tsconfig.base.json
+workspace.json
 
 # dependencies
 /node_modules

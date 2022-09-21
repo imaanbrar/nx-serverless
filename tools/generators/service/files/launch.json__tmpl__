@@ -14,7 +14,7 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "lambda:<%= name %> (nodejs12.x)",
+            "name": "lambda:<%= name %> (nodejs14.x)",
             "sam": {
                 "buildArguments": ["--beta-features"],
                 "localArguments": ["-e", "${workspaceFolder}/services/<%= name %>/events/event.json"]

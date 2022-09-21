@@ -16,7 +16,15 @@
       "options": {
         "cwd": "services/orders",
         "color": true,
-        "command": "nx run build && sam local start-api -d 3000"
+        "command": "nx run build && sam local start-api"
+      }
+    },
+    "serve-debug": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services/orders",
+        "color": true,
+        "command": "nx run build && sam local start-api -d 8005"
       }
     },
     "deploy": {

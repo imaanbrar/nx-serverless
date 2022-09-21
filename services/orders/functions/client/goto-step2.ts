@@ -1,7 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { DynamoDB, PutItemInput } from '@aws-sdk/client-dynamodb';
-import { marshall } from '@aws-sdk/util-dynamodb';
-import { TranscriptOrder } from '../../models/order.model';
+import { ITranscriptOrder, TranscriptOrder } from '../../models/order.model';
 import { GenerateOrderNumber } from './generate-order-number';
 
 interface Request {
@@ -18,7 +16,6 @@ interface Request {
 }
 
 export async function goToStep2(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-    console.log('lambda stet go to step 2');
 
     const { body } = event;
 
@@ -40,11 +37,9 @@ export async function goToStep2(event: APIGatewayProxyEvent): Promise<APIGateway
     // set status
     const status = 'Draft';
 
-    const dynamoClient = new DynamoDB({
-        region: 'ca-central-1',
-    });
+    const order = new TranscriptOrder();
 
-    const newOrder: TranscriptOrder = {
+    const item = order.item({
         orderNumber: orderNumber,
         customerId: username,
         status: status,
@@ -54,41 +49,23 @@ export async function goToStep2(event: APIGatewayProxyEvent): Promise<APIGateway
         matterType: request.matterType,
         courtLocationId: request.courtLocationId,
         courtRoomId: request.courtRoomId,
-        proceedingDate: request.proceedingDate,
+        proceedingDate: new Date(request.proceedingDate),
         judiciarySpelling: request.judiciarySpelling,
-        areChildrenInvolved: request.areChildrenInvolved,
+        areChildrenInvolved: Boolean(request.areChildrenInvolved),
         orderingUserRole: request.orderingUserRole,
 
         sections: null,
         spellings: null,
         isEnglish: false,
         isFrench: true,
+    });
+    
+    await order.create(item);
 
-        createdBy: username,
-        createdDate: new Date(),
-        updatedBy: username,
-        updatedTime: new Date(),
+    return {
+        statusCode: 200,
+        body: JSON.stringify(item),
     };
-
-    const orderParams: PutItemInput = {
-        Item: marshall(newOrder, {
-            convertClassInstanceToMap: true,
-        }),
-        TableName: 'order',
-    };
-
-    try {
-        await dynamoClient.putItem(orderParams);
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ newOrder }),
-        };
-    } catch (err) {
-        console.log(err);
-
-        return sendFail('something went wrong');
-    }
 }
 
 function sendFail(message: string): APIGatewayProxyResult {

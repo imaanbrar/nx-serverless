@@ -14,7 +14,7 @@ Resources:
     Properties:
       CodeUri: filingFunction
       Handler: services/filing/functions/index.lambdaHandler
-      Runtime: nodejs12.x
+      Runtime: nodejs14.x
       Events:
         hellofiling:
           Type: Api

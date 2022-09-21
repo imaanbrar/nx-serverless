@@ -10,11 +10,12 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "importHelpers": false,
-    "target": "ES2020",
+    "target": "ES2017",
     "module": "CommonJS",
     "lib": ["esnext"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "@app/auth/*": ["libs/auth/src/lib/*"],
@@ -24,5 +25,5 @@
       "@app/users/*": ["services/users/src/*"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp", "**/*.spec.ts"]
 }

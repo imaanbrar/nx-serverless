@@ -16,7 +16,12 @@ Resources:
     Properties:
       CodeUri: ../../dist/out-tsc
       Handler: services/filing/functions/index.lambdaHandler
-      Runtime: nodejs12.x
+      Runtime: nodejs14.x
+      Timeout: 120
+      MemorySize: 512
+      Tracing: Active
+      FunctionName: filingService
+      Description: Microservice based lambda function for filing
       Events:
         hellofiling:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api

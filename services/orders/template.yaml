@@ -8,42 +8,27 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 120
 
 Resources:
   OrdersFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: ordersService
-      CodeUri: built
-      Handler: services/orders/functions/index.lambdaHandler
-      Runtime: nodejs12.x
+      CodeUri: ../../
+      Handler: dist/out-tsc/services/orders/functions/index.lambdaHandler
+      Runtime: nodejs14.x
       Events:
         GoToStep2:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /orders/client/go-to-step4
+            Path: /orders/client/go-to-step2
             Method: post 
         GoToStep3:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /orders/client/go-to-step3
             Method: post 
-            Auth: _userScope.Role === 'tds-client'
-              
-  
-PlaceOrderStateMachine:
-  Type: AWS::Serverless::StateMachine
-  Properties:
-    DefinitionUri: index.asl.json
-    Role: arn:aws:iam::123456123456:role/service-role/my-sample-role
-    Tracing:
-      Enabled: true
-    DefinitionSubstitutions:
-      MyFunctionArn: !GetAtt MyFunction.Arn
-      MyDDBTable: !Ref TransactionTable
-    Type: Standard
-    
             
 
 Outputs:

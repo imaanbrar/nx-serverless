@@ -1,0 +1,86 @@
+{
+  "tables": [
+    {
+      "name": "user",
+      "partitionKey": {
+        "name": "username",
+        "type": "S"
+      },
+      "sortKey": null,
+      "indexes": null
+    },
+    {
+      "name": "order",
+      "partitionKey": {
+        "name": "customerId",
+        "type": "S"
+      },
+      "sortKey": {
+        "name": "orderNumber",
+        "type": "S"
+      },
+      "indexes": [
+        {
+          "name": "status",
+          "partitionKey": {
+            "name": "status",
+            "type": "S"
+          },
+          "sortKey": {
+            "name": "orderNumber",
+            "type": "S"
+          }
+        },
+        {
+          "name": "turnaround",
+          "partitionKey": {
+            "name": "turnaround",
+            "type": "S"
+          },
+          "sortKey": {
+            "name": "orderNumber",
+            "type": "S"
+          }
+        },
+        {
+          "name": "processing-clerk",
+          "partitionKey": {
+            "name": "clerkId",
+            "type": "S"
+          },
+          "sortKey": {
+            "name": "orderNumber",
+            "type": "S"
+          }
+        }
+      ]
+    },
+    {
+      "name": "court-location",
+      "partitionKey": {
+        "name": "location",
+        "type": "S"
+      },
+      "sortKey": null,
+      "indexes": null
+    },
+    {
+      "name": "judge",
+      "partitionKey": {
+        "name": "lastName",
+        "type": "S"
+      },
+      "sortKey": null,
+      "indexes": null
+    },
+    {
+      "name": "closure",
+      "partitionKey": {
+        "name": "date",
+        "type": "S"
+      },
+      "sortKey": null,
+      "indexes": null
+    }
+  ]
+}
