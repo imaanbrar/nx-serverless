@@ -22,13 +22,16 @@ export const lambdaHandler = async (
   console.log(`Event: ${JSON.stringify(event, null, 2)}`);
   console.log(`Context: ${JSON.stringify(context, null, 2)}`);
   const records = event.Records;
-  records.forEach(record => [
-    
-  ])
+
+  records.forEach(record => {
+    // process record
+    console.log(record);
+});
+
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'hello audit',
+      message: 'audit save complete',
     }),
   };
 };

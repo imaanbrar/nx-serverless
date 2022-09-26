@@ -17,6 +17,8 @@ Resources:
       CodeUri: ../../dist/out-tsc
       Handler: services/audit/functions/index.lambdaHandler
       Runtime: nodejs14.x
+      EventInvokeConfig:
+        MaximumRetryAttempts: 2
       Events:
         DDBEvent:
           Type: DynamoDB
