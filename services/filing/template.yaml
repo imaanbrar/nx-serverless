@@ -11,6 +11,35 @@ Globals:
     Timeout: 3
 
 Resources:
+  ApiFunction:
+      Type: AWS::Serverless::HttpApi
+      Properties:
+        Auth:
+          DefaultAuthorizer: OAuth2
+          Authorizers:
+            OAuth2:
+              AuthorizationScopes:
+                - openid
+                - profile
+                - email
+              JwtConfiguration:
+                issuer: "https://access-uat.alberta.ca/auth/realms/5ce2889d-0965-4e85-a139-483662b2442c"
+                audience:
+                  - account
+                  - trds:transcripts-api
+        CorsConfiguration:
+          AllowOrigins:
+            - "https://example.com"
+          AllowHeaders:
+            - x-apigateway-header
+          AllowMethods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+          MaxAge: 600
+          AllowCredentials: true
+          
   filingFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -28,6 +57,10 @@ Resources:
           Properties:
             Path: /filing/hello-filing
             Method: post
+            Auth:
+              AuthorizationScopes:
+                - "trds:transcripts-api:tds-client"
+                - "trds:transcripts-api:tds-admin"
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
