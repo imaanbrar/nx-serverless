@@ -14,6 +14,7 @@ import { goToStep3 } from './client/goto-step3';
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     console.log('lambda my start 123');
+    console.log(event);
     console.log(context);
     switch (event.httpMethod) {
         case 'POST':

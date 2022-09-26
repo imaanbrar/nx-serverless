@@ -9,6 +9,38 @@ Globals:
   Function:
     Timeout: 120
 Resources:
+  OrdersApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Auth:
+        DefaultAuthorizer: MyLambdaRequestAuthorizer
+        Authorizers:
+          MyLambdaRequestAuthorizer:
+            FunctionArn:
+              Fn::GetAtt:
+              - MyAuthFunction
+              - Arn
+            FunctionInvokeRole:
+              Fn::GetAtt:
+              - MyAuthFunctionRole
+              - Arn
+            Identity:
+              Headers:
+              - Authorization
+            AuthorizerPayloadFormatVersion: 1.0
+            EnableSimpleResponses: true
+      CorsConfiguration:
+        AllowOrigins:
+        - https://example.com
+        AllowHeaders:
+        - x-apigateway-header
+        AllowMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        MaxAge: 600
+        AllowCredentials: true
   OrdersFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -18,17 +50,27 @@ Resources:
       Runtime: nodejs14.x
       Events:
         GoToStep2:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /orders/client/go-to-step2
             Method: post
+            Auth:
+              Authorizer: MyLambdaRequestAuthorizer
         GoToStep3:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /orders/client/go-to-step3
             Method: post
     Metadata:
       SamResourceId: OrdersFunction
+  MyAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: MyAuthFunction
+      Handler: dist/out-tsc/services/auth/authorizer/index.lambdaHandler
+      Runtime: nodejs14.x
+    Metadata:
+      SamResourceId: MyAuthFunction
 Outputs:
   OrdersApi:
     Description: API Gateway endpoint URL for Prod stage for Orders

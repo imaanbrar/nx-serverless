@@ -1,0 +1,54 @@
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to SAM CLI audit",
+      "address": "localhost",
+      "port": 3000,
+      "localRoot": "${workspaceRoot}/dist/out-tsc",
+      "remoteRoot": "/var/task",
+      "outFiles": ["${workspaceFolder}/dist/out-tsc/**/*.js"],
+      "preLaunchTask": "build service/audit"
+    },
+    {
+      "type": "aws-sam",
+      "request": "direct-invoke",
+      "name": "lambda:audit (nodejs14.x)",
+      "sam": {
+        "buildArguments": ["--beta-features"],
+        "localArguments": [
+          "-e",
+          "${workspaceFolder}/services/audit/events/event.json"
+        ]
+      },
+      "invokeTarget": {
+        "target": "template",
+        "templatePath": "services/audit/template.yaml",
+        "logicalId": "auditFunction"
+      },
+      "lambda": {
+        "payload": {},
+        "environmentVariables": {}
+      },
+      "preLaunchTask": "build service/audit"
+    },
+    {
+      "type": "aws-sam",
+      "request": "direct-invoke",
+      "name": "API lambda:auditFunction (nodejs12.x)",
+      "invokeTarget": {
+        "target": "api",
+        "templatePath": "services/audit/template.yaml",
+        "logicalId": "auditFunction"
+      },
+      "api": {
+        "path": "/audit",
+        "httpMethod": "get",
+        "payload": {
+          "json": {}
+        }
+      }
+    }
+  ]
+}

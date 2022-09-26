@@ -60,7 +60,6 @@ export abstract class Model<T extends BaseItem> {
     item.uId = getuid();
     item.createdAt = new Date();
     item.createdBy = 'imaanvirbrar';
-    item.version = CURRENT_VERSION;
     const result = await this.model.create(item, {
       return: 'item',
     });

@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "audit": "services/audit",
     "auth": "services/auth",
     "core": "services/core",
     "db": "libs/db",
