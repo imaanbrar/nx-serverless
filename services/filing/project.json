@@ -16,7 +16,15 @@
       "options": {
         "cwd": "services/filing",
         "color": true,
-        "command": "tsc && sam local start-api -d 8065"
+        "command": "nx run build && sam local start-api"
+      }
+    },
+    "serve-debug": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services/filing",
+        "color": true,
+        "command": "nx run build && sam local start-api -d 8005"
       }
     },
     "deploy": {

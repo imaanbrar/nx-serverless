@@ -15,11 +15,11 @@ Resources:
       Type: AWS::Serverless::HttpApi
       Properties:
         Auth:
-          DefaultAuthorizer: MyLambdaRequestAuthorizer
+          DefaultAuthorizer: LambdaAuthorizer
           Authorizers:
-            MyLambdaRequestAuthorizer:
-              FunctionArn: !GetAtt MyAuthFunction.Arn
-              FunctionInvokeRole: !GetAtt MyAuthFunctionRole.Arn
+            LambdaAuthorizer:
+              FunctionArn: !GetAtt AuthFunction.Arn
+              FunctionInvokeRole: !GetAtt AuthFunctionRole.Arn
               Identity:
                 Headers:
                   - Authorization
@@ -30,6 +30,7 @@ Resources:
             - "https://example.com"
           AllowHeaders:
             - x-apigateway-header
+            - Authorization
           AllowMethods:
             - GET
             - POST
@@ -51,14 +52,14 @@ Resources:
             Path: /orders/client/go-to-step2
             Method: post
             Auth:
-              Authorizer: MyLambdaRequestAuthorizer
+              Authorizer: LambdaAuthorizer
         GoToStep3:
           Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /orders/client/go-to-step3
             Method: post 
 
-  MyAuthFunction:
+  AuthFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ../../
