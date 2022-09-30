@@ -1,0 +1,129 @@
+{
+    "configurations": [
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "API filing:filingFunction",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "${workspaceFolder}/services/filing/template.yaml",
+                "logicalId": "filingFunction"
+            },
+            "api": {
+                "path": "/",
+                "httpMethod": "get",
+                "payload": {
+                    "json": {}
+                }
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "API filing:filingFunction",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "${workspaceFolder}/services/filing/template.yaml",
+                "logicalId": "filingFunction"
+            },
+            "api": {
+                "path": "/",
+                "httpMethod": "get",
+                "payload": {
+                    "json": {}
+                }
+            }
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to SAM CLI",
+            "address": "localhost",
+            "port": 8005,
+            "localRoot": "${workspaceRoot}/dist/out-tsc",
+            "remoteRoot": "/var/task",
+            "outFiles": [
+                "${workspaceFolder}/services/orders/built/**/*.js"
+            ],
+            "preLaunchTask": "build service/orders"
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "lambda:Orders (nodejs12.x)",
+            "sam": {
+                "buildArguments": [
+                    "--beta-features"
+                ],
+                "localArguments": [
+                    "-e",
+                    "${workspaceFolder}/services/orders/events/go-to-step2-success.json"
+                ]
+            },
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "services/orders/template.yaml",
+                "logicalId": "OrdersFunction"
+            },
+            "lambda": {
+                "payload": {},
+                "environmentVariables": {}
+            },
+            "preLaunchTask": "build service/orders"
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "API lambda:OrdersFunction (nodejs12.x)",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "services/orders/template.yaml",
+                "logicalId": "OrdersFunction"
+            },
+            "api": {
+                "path": "/orders",
+                "httpMethod": "get",
+                "payload": {
+                    "json": {}
+                }
+            }
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to SAM CLI filing",
+            "address": "localhost",
+            "port": 8005,
+            "localRoot": "${workspaceRoot}/dist/out-tsc",
+            "remoteRoot": "/var/task",
+            "outFiles": [
+                "${workspaceFolder}/dist/out-tsc/**/*.js"
+            ],
+            "preLaunchTask": "build service/filing"
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "invoke auth event",
+            "sam": {
+                "buildArguments": [
+                    "--beta-features"
+                ],
+                "localArguments": [
+                    "-e",
+                    "${workspaceFolder}/services/auth/events/token-event.json"
+                ]
+            },
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "services/auth/template.yaml",
+                "logicalId": "AuthFunction"
+            },
+            "lambda": {
+                "payload": {},
+                "environmentVariables": {}
+            },
+            "preLaunchTask": "build service/auth"
+        },
+    ]
+}
