@@ -1,5 +1,5 @@
 {
-  "root": "services/auth",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "services/auth/src",
   "targets": {
@@ -8,7 +8,7 @@
       "options": {
         "cwd": "services/auth",
         "color": true,
-        "command": "tsc"
+        "command": "tsc && sam build"
       }
     },
     "serve": {
@@ -16,7 +16,15 @@
       "options": {
         "cwd": "services/auth",
         "color": true,
-        "command": "sls offline start"
+        "command": "nx run build && sam local invoke -e events/token-event.json"
+      }
+    },
+    "serve-debug": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services/auth",
+        "color": true,
+        "command": "nx run build && sam local invoke -e events/token-event.json -d 8065"
       }
     },
     "deploy": {
@@ -24,7 +32,7 @@
       "options": {
         "cwd": "services/auth",
         "color": true,
-        "command": "sls deploy --verbose"
+        "command": "sam deploy"
       },
       "dependsOn": [
         {
@@ -38,7 +46,7 @@
       "options": {
         "cwd": "services/auth",
         "color": true,
-        "command": "sls remove"
+        "command": "sam delete"
       }
     },
     "lint": {
@@ -51,7 +59,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/services/auth"],
       "options": {
-        "jestConfig": "services/auth/jest.config.js",
+        "jestConfig": "services/auth/jest.config.ts",
         "passWithNoTests": true
       }
     }

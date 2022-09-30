@@ -9,6 +9,7 @@
     "http": "libs/http",
     "orders": "services/orders",
     "todos": "services/todos",
-    "users": "services/users"
+    "users": "services/users",
+    "all": "services"
   }
 }

@@ -1,8 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: 'sam-app
-
-  Sample SAM Template for sam-app
+Description: 'Orders Service
 
   '
 Globals:
@@ -13,16 +11,16 @@ Resources:
     Type: AWS::Serverless::HttpApi
     Properties:
       Auth:
-        DefaultAuthorizer: MyLambdaRequestAuthorizer
+        DefaultAuthorizer: LambdaAuthorizer
         Authorizers:
-          MyLambdaRequestAuthorizer:
+          LambdaAuthorizer:
             FunctionArn:
               Fn::GetAtt:
-              - MyAuthFunction
+              - AuthFunction
               - Arn
             FunctionInvokeRole:
               Fn::GetAtt:
-              - MyAuthFunctionRole
+              - AuthFunctionRole
               - Arn
             Identity:
               Headers:
@@ -34,6 +32,7 @@ Resources:
         - https://example.com
         AllowHeaders:
         - x-apigateway-header
+        - Authorization
         AllowMethods:
         - GET
         - POST
@@ -55,7 +54,7 @@ Resources:
             Path: /orders/client/go-to-step2
             Method: post
             Auth:
-              Authorizer: MyLambdaRequestAuthorizer
+              Authorizer: LambdaAuthorizer
         GoToStep3:
           Type: HttpApi
           Properties:
@@ -63,14 +62,14 @@ Resources:
             Method: post
     Metadata:
       SamResourceId: OrdersFunction
-  MyAuthFunction:
+  AuthFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: MyAuthFunction
+      CodeUri: AuthFunction
       Handler: dist/out-tsc/services/auth/authorizer/index.lambdaHandler
       Runtime: nodejs14.x
     Metadata:
-      SamResourceId: MyAuthFunction
+      SamResourceId: AuthFunction
 Outputs:
   OrdersApi:
     Description: API Gateway endpoint URL for Prod stage for Orders

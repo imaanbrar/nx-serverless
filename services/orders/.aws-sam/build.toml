@@ -8,6 +8,6 @@ architecture = "x86_64"
 handler = "dist/out-tsc/services/orders/functions/index.lambdaHandler"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["OrdersFunction", "MyAuthFunction"]
+functions = ["OrdersFunction", "AuthFunction"]
 
 [layer_build_definitions]

@@ -1,42 +1,23 @@
 import {
     APIGatewayRequestAuthorizerEvent,
-    AuthResponse,
-    PolicyDocument,
+    APIGatewaySimpleAuthorizerResult
   } from "aws-lambda";
   import jwt, { JwtPayload } from "jsonwebtoken";
   import { Role, controllers } from './permissions'
   
-  type DecodedToken = {
-    sub: string;
-    username: string;
-  };
-  
-  function generatePolicy(effect: string, resource: string): PolicyDocument {
-    const policyDocument = {} as PolicyDocument;
-    if (effect && resource) {
-      policyDocument.Version = "2012-10-17";
-      policyDocument.Statement = [];
-      const statementOne: any = {};
-      statementOne.Action = "execute-api:Invoke";
-      statementOne.Effect = effect;
-      statementOne.Resource = resource;
-      policyDocument.Statement[0] = statementOne;
-    }
-    console.log(`Policy document: ${JSON.stringify(policyDocument)}`);
-    return policyDocument;
-  }
-  
   async function validateToken(token: string): Promise<string> {
     try {
-        const payload = await jwt.verify(token, 'secretKey', {
+        var payload = await jwt.verify(token, 'secretKey', {
             issuer: 'https://access-uat.alberta.ca/auth/realms/5ce2889d-0965-4e85-a139-483662b2442c',
             audience: ['trds:transcripts-api', 'account']
         });
+        if (typeof(payload) === 'object')
+          payload = '334'
         console.log(payload);
         return typeof(payload) === 'string' ? payload : JSON.stringify(payload);
       }
     catch (error) {
-      throw new Error(`Token is not valid: ${error}`);
+      throw new Error(`Token is not valid: ${JSON.stringify(error)}`);
     }
   };
 
@@ -50,9 +31,9 @@ import {
     return roles;
   }
   
-  export async function authHandler(
+  export async function lambdaHandler(
     event: APIGatewayRequestAuthorizerEvent
-  ): Promise<AuthResponse> {
+  ): Promise<APIGatewaySimpleAuthorizerResult> {
     try {
       const token = event?.headers?.["Authorization"];
   
@@ -63,9 +44,6 @@ import {
       // perform authentication
       const payload = await validateToken(token);
       const payloadJson = JSON.parse(payload);
-  
-      const decodedToken = jwt.decode(token) as DecodedToken;
-      if (!decodedToken) throw new Error("token can not be decoded");
       
       // perform authorization
       const userRoles = extractRolesFromToken(payload);
@@ -76,11 +54,9 @@ import {
         throw new Error("user is not authorized to perform this action");
         
       }
-  
-      const policyDoc = generatePolicy("Allow", "*");
+
       return {
-        principalId: decodedToken.sub,
-        policyDocument: policyDoc,
+        isAuthorized: true,
         // add the permissions to the context which will make its way to consuming lambda function
         context: {
           username: payloadJson.preferred_username,
@@ -88,7 +64,7 @@ import {
           nameOfUser: payloadJson.name,
           roles: userRoles.toString(),
         },
-      } as AuthResponse;
+      } as APIGatewaySimpleAuthorizerResult;
     } catch (error) {
       console.error("An error happened during authentication", error);
       throw new Error("Unauthorized");

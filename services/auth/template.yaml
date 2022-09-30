@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Auth Function
+  
+Globals:
+  Function:
+    Timeout: 900
+
+Parameters: 
+  env:
+    Type: String
+    Default: "dev"
+    AllowedValues:
+      - dev
+      - test
+      - prod
+    Description: Envrionment value. Enter dev, test or prod. Default is dev
+
+Resources:
+  AuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: authFunction
+      Description: 'Lambda Authorizer'
+      CodeUri: ../../
+      Handler: dist/out-tsc/services/auth/authorizer/index.lambdaHandler
+      Runtime: nodejs14.x
+            
+Outputs:
+  AuthFunction:
+    Description: "Auth Function ARN"
+    Value: !GetAtt AuthFunction.Arn
+  AuthFunctionRole:
+    Description: "Implicit IAM Role created for Auth function"
+    Value: !GetAtt AuthFunctionRole.Arn

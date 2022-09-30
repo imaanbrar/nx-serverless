@@ -7,6 +7,8 @@
     "localstack": "docker-compose up",
     "build": "nx build",
     "serve": "nx run-many --target=serve --all",
+    "serve-all": "sam local start-api -t services/template.yaml",
+    "serve-all-debug": "sam local start-api -d 8065 -t services/template.yaml",
     "test": "nx run-many --target=test --all",
     "lint": "nx run-many --target=lint --all",
     "deploy": "nx run-many --target=deploy --all",

@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Backend services for pcff (PC Family Filing)
+
+Parameters: 
+  env:
+    Type: String
+    Default: "dev"
+    AllowedValues:
+      - dev
+      - test
+      - prod
+    Description: Envrionment value. Enter dev, test or prod. Default is dev.
+
+Resources:
+  authFunction:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: ./auth/template.yaml
+      Parameters:
+        env: !Ref env
+  ordersService:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: ./orders/template.yaml
+      Parameters:
+        env: !Ref env
+        AuthFunctionArn: !Ref authFunction.AuthFunction
+        AuthFunctionInvokeRoleArn: !Ref authFunction.AuthFunctionRole
+  filingService:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: ./filing/template.yaml
+      Parameters:
+        env: !Ref env

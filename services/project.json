@@ -1,0 +1,25 @@
+{
+  "root": "services/all",
+  "projectType": "application",
+  "sourceRoot": "services",
+  "targets": {
+    "serve": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services",
+        "color": true,
+        "command": "nx run build && sam local start-api"
+      }
+    },
+    "serve-debug": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services",
+        "color": true,
+        "command": "nx run build && sam local start-api -d 8005"
+      }
+    }
+  },
+  "tags": ["service"],
+  "implicitDependencies": ["core"]
+}
