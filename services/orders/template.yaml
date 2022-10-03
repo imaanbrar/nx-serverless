@@ -2,12 +2,6 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   Orders Service
-  
-Globals:
-  Function:
-    Timeout: 900
-    Auth:
-      Authorizer: LambdaAuthorizer
 
 
 Parameters: 
@@ -80,11 +74,15 @@ Resources:
           Properties:
             Path: /orders/client/go-to-step3
             Method: post 
+            Auth:
+              Authorizer: LambdaAuthorizer
         PlaceOrder:
           Type: HttpApi
           Properties:
             Path: /orders/place-order
             Method: post 
+            Auth:
+              Authorizer: LambdaAuthorizer
             
 Outputs:
   OrdersApi:
