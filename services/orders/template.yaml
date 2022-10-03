@@ -6,6 +6,9 @@ Description: >
 Globals:
   Function:
     Timeout: 900
+    Auth:
+      Authorizer: LambdaAuthorizer
+
 
 Parameters: 
   env:
@@ -76,6 +79,11 @@ Resources:
           Type: HttpApi
           Properties:
             Path: /orders/client/go-to-step3
+            Method: post 
+        PlaceOrder:
+          Type: HttpApi
+          Properties:
+            Path: /orders/place-order
             Method: post 
             
 Outputs:
