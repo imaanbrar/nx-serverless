@@ -16,7 +16,7 @@
       "options": {
         "cwd": "services/orders",
         "color": true,
-        "command": "nx run build && sam local start-api"
+        "command": "nx run build && sam local start-api --warm-containers EAGER"
       }
     },
     "serve-debug": {
@@ -24,7 +24,7 @@
       "options": {
         "cwd": "services/orders",
         "color": true,
-        "command": "nx run build && sam local start-api -d 8005"
+        "command": "nx run build && sam local start-api -d 8005 --warm-containers EAGER"
       }
     },
     "deploy": {

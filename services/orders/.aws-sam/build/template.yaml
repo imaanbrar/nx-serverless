@@ -3,29 +3,44 @@ Transform: AWS::Serverless-2016-10-31
 Description: 'Orders Service
 
   '
-Globals:
-  Function:
-    Timeout: 120
+Parameters:
+  env:
+    Type: String
+    Default: dev
+    AllowedValues:
+    - dev
+    - test
+    - prod
+    Description: Envrionment value. Enter dev, test or prod. Default is dev.
+  AuthFunctionArn:
+    Type: String
+    Default: some-arn
+    Description: Specify ARN for AuthFunction
+  AuthFunctionInvokeRoleArn:
+    Type: String
+    Default: some-arn
+    Description: Specify ARN for AuthFunctionInvokeRole
 Resources:
   OrdersApi:
     Type: AWS::Serverless::HttpApi
     Properties:
+      Description: Http API for Orders
+      StageName:
+        Ref: env
       Auth:
         DefaultAuthorizer: LambdaAuthorizer
         Authorizers:
           LambdaAuthorizer:
             FunctionArn:
-              Fn::GetAtt:
-              - AuthFunction
-              - Arn
+              Ref: AuthFunctionArn
             FunctionInvokeRole:
-              Fn::GetAtt:
-              - AuthFunctionRole
-              - Arn
+              Ref: AuthFunctionInvokeRoleArn
             Identity:
               Headers:
               - Authorization
-            AuthorizerPayloadFormatVersion: 1.0
+              Context:
+              - routeKey
+            AuthorizerPayloadFormatVersion: 2.0
             EnableSimpleResponses: true
       CorsConfiguration:
         AllowOrigins:
@@ -45,7 +60,7 @@ Resources:
     Properties:
       FunctionName: ordersService
       CodeUri: OrdersFunction
-      Handler: dist/out-tsc/services/orders/functions/index.lambdaHandler
+      Handler: services/orders/functions/index.lambdaHandler
       Runtime: nodejs14.x
       Events:
         GoToStep2:
@@ -60,16 +75,17 @@ Resources:
           Properties:
             Path: /orders/client/go-to-step3
             Method: post
+            Auth:
+              Authorizer: LambdaAuthorizer
+        PlaceOrder:
+          Type: HttpApi
+          Properties:
+            Path: /orders/place-order
+            Method: post
+            Auth:
+              Authorizer: LambdaAuthorizer
     Metadata:
       SamResourceId: OrdersFunction
-  AuthFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: AuthFunction
-      Handler: dist/out-tsc/services/auth/authorizer/index.lambdaHandler
-      Runtime: nodejs14.x
-    Metadata:
-      SamResourceId: AuthFunction
 Outputs:
   OrdersApi:
     Description: API Gateway endpoint URL for Prod stage for Orders

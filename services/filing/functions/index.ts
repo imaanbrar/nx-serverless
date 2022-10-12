@@ -14,7 +14,7 @@ import {
  *
  */
 
-export const lambdaHandler = async (
+export const lambdaHandler = async ( 
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {

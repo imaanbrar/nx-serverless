@@ -45,7 +45,6 @@
             "outFiles": [
                 "${workspaceFolder}/services/orders/built/**/*.js"
             ],
-            "preLaunchTask": "build service/orders"
         },
         {
             "type": "aws-sam",

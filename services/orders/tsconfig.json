@@ -6,12 +6,14 @@
     "target": "ES2017",
     "noImplicitAny": true,
     "preserveConstEnums": true,
+    "moduleResolution": "node",
     "outDir": "../../dist/out-tsc",
+    "types": ["node"],
     "sourceMap": true,
     "resolveJsonModule": true,
     "rootDir": "../../"
   },
-  "include": ["functions/**/*"],
+  "include": ["functions/**/*", ],
   "exclude": ["../../node_modules"],
   
   "files": []
