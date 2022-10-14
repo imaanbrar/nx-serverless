@@ -27,6 +27,14 @@
         "command": "nx run build && sam local start-api -d 8005 --warm-containers EAGER"
       }
     },
+    "serve-order-placed-step-function": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "services/orders",
+        "color": true,
+        "command": "sam local start-lambda && docker run -p 8083:8083 amazon/aws-stepfunctions-local && aws stepfunctions --endpoint http://localhost:8083 start-execution --state-machine arn:aws:states:us-east-1:123456789012:stateMachine:HelloWorld --name place-order-state-machine"
+      }
+    },
     "deploy": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {

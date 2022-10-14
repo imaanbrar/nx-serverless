@@ -1,21 +1,73 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Request response
+  Place order state machine
 
-  SAM Template for place order 
-
+Parameters: 
+  env:
+    Type: String
+    Default: "dev"
+    AllowedValues:
+      - dev
+      - test
+      - prod
+    Description: Envrionment value. Enter dev, test or prod. Default is dev.
+  OrdersFunctionArn:
+    Type: String
+    Default: 'some-arn'
+    Description: Specify ARN for OrdersFunction
+  PaymentsFunctionArn:
+    Type: String
+    Default: 'some-arn'
+    Description: Specify ARN for PaymentsFunction
+  NotificationFunctionArn:
+    Type: String
+    Default: 'some-arn'
+    Description: Specify ARN for NotificationFunction
+  OrdersApiId:
+    Type: String
+    Default: 'some-arn'
+    Description: Specify ID for Orders API
 
 Resources:
+  OrdersApi:
+      Type: AWS::Serverless::Api
+      Properties:
+        Description: Http API for Orders
+        StageName: !Ref env
+        Auth:
+          DefaultAuthorizer: LambdaAuthorizer
+          Authorizers:
+            LambdaAuthorizer:
+              FunctionArn: !Ref AuthFunctionArn
+              FunctionInvokeRole: !Ref AuthFunctionInvokeRoleArn
+              Identity:
+                Headers:
+                  - Authorization
+                Context:
+                  - routeKey
+              AuthorizerPayloadFormatVersion: 2.0
+              EnableSimpleResponses: true
 ##########################################################################
 #   STEP FUNCTION                                                        #
 ##########################################################################
 
-PlaceOrderStateMachine:
-  Type: AWS::Serverless::StateMachine
-  Properties:
-    DefinitionUri: index.asl.json
-    Type: Standard
+  PlaceOrderStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      DefinitionUri: index.asl.json
+      DefinitionSubstitutions:
+        OrdersServiceFunction: !Ref OrdersFunctionArn
+        PaymentsServiceFunction: !Ref PaymentsFunctionArn
+        NotificationsServiceFunction: !Ref NotificationFunctionArn
+      Type: Standard
+      Events:
+        PlaceOrder:
+          Type: Api
+          Properties:
+            Path: /orders/client/place-order
+            Method: post
+            RestApiId: !Ref OrdersApi
 
 Outputs:
   syncronousApiStateMachine:

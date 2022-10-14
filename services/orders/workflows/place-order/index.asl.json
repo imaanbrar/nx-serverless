@@ -1,64 +1,103 @@
 {
-    "Comment": "An example of the Amazon States Language for starting a task and waiting for a callback.",
-  "StartAt": "ParallelState",
+  "Comment": "Place Order State Machine",
+  "StartAt": "Start Place Order",
   "States": {
-    "ParallelState": {
-      "Type": "Parallel",
-      "Branches": [
+    "Start Place Order": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "FunctionName": "${OrdersFunction}",
+        "Payload.$": "$"
+      },
+      "Retry": [
         {
-          "StartAt": "sumFunction",
-          "States": {
-            "sumFunction": {
-              "Type": "Task",
-              "Resource": "arn:aws:states:::lambda:invoke",
-              "Parameters": {
-                "FunctionName": "${sumFunction}",
-                "Payload.$": "$"
-              },
-              "End": true,
-              "ResultSelector": {
-                "sum.$": "$.Payload.sum"
-              }
-            }
-          }
-        },
-        {
-          "StartAt": "AvgFunction",
-          "States": {
-            "AvgFunction": {
-              "Type": "Task",
-              "Resource": "arn:aws:states:::lambda:invoke",
-              "Parameters": {
-                "FunctionName": "${AvgFunction}",
-                "Payload.$": "$"
-              },
-              "End": true,
-              "ResultSelector": {
-                "avg.$": "$.Payload.avg"
-              }
-            }
-          }
-        },
-        {
-          "StartAt": "MaxMinFunction",
-          "States": {
-            "MaxMinFunction": {
-              "Type": "Task",
-              "Resource": "arn:aws:states:::lambda:invoke",
-              "Parameters": {
-                "FunctionName": "${MaxMinFunction}",
-                "Payload.$": "$"
-              },
-              "End": true,
-              "ResultSelector": {
-                "min.$": "$.Payload.min",
-                "max.$": "$.Payload.max"
-              }
-            }
-          }
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2,
+          "BackoffRate": 2
         }
       ],
-      "End": true
+      "Next": "Process Payment",
+      "Comment": "Start Place Order using Orders Service Lambda",
+      "TimeoutSeconds": 20
+    },
+    "Process Payment": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "${PaymentsFunction}"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2,
+          "BackoffRate": 2
+        }
+      ],
+      "TimeoutSeconds": 20,
+      "Next": "Send Notification",
+      "Comment": "Process Payment using Payments Service Lambda"
+    },
+    "Send Notification": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "${NotificationFunction}"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 0,
+          "BackoffRate": 2
+        }
+      ],
+      "TimeoutSeconds": 20,
+      "Next": "Commit Place Order",
+      "Comment": "Send Notification using Notification Service Lambda"
+    },
+    "Commit Place Order": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "${OrdersFunction}"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2,
+          "BackoffRate": 2
+        }
+      ],
+      "End": true,
+      "TimeoutSeconds": 20,
+      "Comment": "Commit Place Order using Orders Service Lambda"
     }
-  }
+  },
+  "TimeoutSeconds": 30
 }

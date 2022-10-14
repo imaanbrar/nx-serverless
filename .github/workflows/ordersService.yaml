@@ -218,7 +218,7 @@ jobs:
           role-duration-seconds: 3600
           role-skip-session-tagging: true
 
-      - name: Deploy to dev account
+      - name: Deploy to dev account 
         run: |
           sam deploy --stack-name ${DEV_STACK_NAME} \
             --template packaged-dev.yaml \

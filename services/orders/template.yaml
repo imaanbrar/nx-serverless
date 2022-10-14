@@ -76,13 +76,16 @@ Resources:
             Method: post 
             Auth:
               Authorizer: LambdaAuthorizer
-        PlaceOrder:
-          Type: HttpApi
-          Properties:
-            Path: /orders/place-order
-            Method: post 
-            Auth:
-              Authorizer: LambdaAuthorizer
+  # PlaceOrdersStateMachine:
+  #   Type: AWS::Serverless::Application
+  #   Properties:
+  #     Location: ./workflows/place-order/template.yaml
+  #     Parameters:
+  #       env: !Ref env
+  #       OrdersFunctionArn: !GetAtt OrdersFunction.Arn
+  #       PaymentsFunctionArn: !GetAtt OrdersFunction.Arn
+  #       NotificationsFunctionArn: !GetAtt OrdersFunction.Arn
+  #       OrdersApiId: !Ref OrdersApi
             
 Outputs:
   OrdersApi:

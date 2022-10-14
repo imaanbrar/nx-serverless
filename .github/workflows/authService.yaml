@@ -135,7 +135,7 @@ jobs:
           role-to-assume: ${{ env.DEV_PIPELINE_EXECUTION_ROLE }}
           role-session-name: dev-packaging
           role-duration-seconds: 3600
-          role-skip-session-tagging: true
+          role-skip-session-tagging: true 
 
       - name: Upload artifacts to dev artifact buckets
         run: |

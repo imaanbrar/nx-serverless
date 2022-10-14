@@ -147,7 +147,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: packaged-dev.yaml
-          path: packaged-dev.yaml
+          path: packaged-dev.yaml 
 
       # - name: Assume the testing pipeline user role
       #   uses: aws-actions/configure-aws-credentials@v1
