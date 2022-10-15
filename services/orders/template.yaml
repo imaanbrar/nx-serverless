@@ -65,6 +65,7 @@ Resources:
         GoToStep2:
           Type: HttpApi
           Properties:
+            ApiId: !Ref OrdersApi
             Path: /orders/client/go-to-step2
             Method: post
             Auth:
@@ -72,6 +73,7 @@ Resources:
         GoToStep3:
           Type: HttpApi
           Properties:
+            ApiId: !Ref OrdersApi
             Path: /orders/client/go-to-step3
             Method: post 
             Auth:
