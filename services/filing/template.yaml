@@ -55,6 +55,7 @@ Resources:
         hellofiling:
           Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
+            ApiId: !Ref FilingApi
             Path: /filing/hello-filing
             Method: post
             Auth:
