@@ -3,6 +3,20 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
+            "name": "filing:filingFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/services/filing/template.yaml",
+                "logicalId": "filingFunction"
+            },
+            "lambda": {
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
             "name": "API filing:filingFunction",
             "invokeTarget": {
                 "target": "api",
@@ -44,7 +58,7 @@
             "remoteRoot": "/var/task",
             "outFiles": [
                 "${workspaceFolder}/services/orders/built/**/*.js"
-            ],
+            ]
         },
         {
             "type": "aws-sam",
@@ -123,6 +137,6 @@
                 "environmentVariables": {}
             },
             "preLaunchTask": "build service/auth"
-        },
+        }
     ]
 }
