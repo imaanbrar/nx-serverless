@@ -65,11 +65,11 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   FilingApiUrl:
-    Description: URL of your API endpoint
+    Description: URL of your FilingApi endpoint
     Value:
-      Fn::Sub: 'https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/'
+      Fn::Sub: 'https://${FilingApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/'
   FilingApiId:
-    Description: Api id of HttpApi
+    Description: Api id of FilingApi
     Value:
       Ref: FilingApi
   FilingFunction:

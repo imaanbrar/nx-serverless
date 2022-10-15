@@ -91,11 +91,11 @@ Resources:
             
 Outputs:
   OrdersApiUrl:
-    Description: URL of your API endpoint
+    Description: URL of your OrdersApi endpoint
     Value:
-      Fn::Sub: 'https://${HttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/'
+      Fn::Sub: 'https://${OrdersApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/'
   OrdersApiId:
-    Description: Api id of HttpApi
+    Description: Api id of OrdersApi
     Value:
       Ref: OrdersApi
   OrdersFunction:
