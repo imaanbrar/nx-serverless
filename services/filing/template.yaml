@@ -15,18 +15,18 @@ Resources:
       Type: AWS::Serverless::HttpApi
       Properties:
         Auth:
-          DefaultAuthorizer: OAuth2
+          DefaultAuthorizer: LambdaAuthorizer
           Authorizers:
-            OAuth2:
-              AuthorizationScopes:
-                - openid
-                - profile
-                - email
-              JwtConfiguration:
-                issuer: "https://access-uat.alberta.ca/auth/realms/5ce2889d-0965-4e85-a139-483662b2442c"
-                audience:
-                  - account
-                  - trds:transcripts-api
+            LambdaAuthorizer:
+              FunctionArn: !Ref AuthFunctionArn
+              FunctionInvokeRole: !Ref AuthFunctionInvokeRoleArn
+              Identity:
+                Headers:
+                  - Authorization
+                Context:
+                  - routeKey
+              AuthorizerPayloadFormatVersion: 2.0
+              EnableSimpleResponses: true
         CorsConfiguration:
           AllowOrigins:
             - "https://example.com"
@@ -58,9 +58,7 @@ Resources:
             Path: /filing/hello-filing
             Method: post
             Auth:
-              AuthorizationScopes:
-                - "trds:transcripts-api:tds-client"
-                - "trds:transcripts-api:tds-admin"
+              Authorizer: LambdaAuthorizer
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
