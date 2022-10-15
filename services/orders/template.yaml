@@ -93,7 +93,7 @@ Outputs:
   OrdersApiUrl:
     Description: URL of your OrdersApi endpoint
     Value:
-      Fn::Sub: 'https://${OrdersApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/'
+      Fn::Sub: 'https://${OrdersApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${env}/'
   OrdersApiId:
     Description: Api id of OrdersApi
     Value:

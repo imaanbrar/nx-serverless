@@ -67,7 +67,7 @@ Outputs:
   FilingApiUrl:
     Description: URL of your FilingApi endpoint
     Value:
-      Fn::Sub: 'https://${FilingApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${StageName}/'
+      Fn::Sub: 'https://${FilingApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/dev/'
   FilingApiId:
     Description: Api id of FilingApi
     Value:
