@@ -28,6 +28,19 @@ Resources:
       Properties:
         Description: Http API for Orders
         StageName: !Ref env
+        DefinitionBody:
+          info:
+            title:
+              Ref: AWS::StackName
+            version: "1.0"
+          openapi: 3.0.1
+          paths:
+            /orders/client/go-to-step2:
+              post:
+                responses: {}
+            /orders/client/go-to-step3:
+              post:
+                responses: {}
         Auth:
           DefaultAuthorizer: LambdaAuthorizer
           Authorizers:
