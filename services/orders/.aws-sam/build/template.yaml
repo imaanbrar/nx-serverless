@@ -24,22 +24,75 @@ Resources:
   OrdersApi:
     Type: AWS::Serverless::HttpApi
     Properties:
-      Description: Http API for Orders
       StageName:
         Ref: env
-      CorsConfiguration:
-        AllowOrigins:
-        - https://example.com
-        AllowHeaders:
-        - x-apigateway-header
-        - Authorization
-        AllowMethods:
-        - GET
-        - POST
-        - PUT
-        - DELETE
-        MaxAge: 600
-        AllowCredentials: true
+      DefinitionBody:
+        openapi: 3.0.1
+        info:
+          title: orders-service-http-api
+          description: Http API for Orders
+          version: '1.0'
+        paths:
+          /orders/client/go-to-step2:
+            post:
+              responses:
+                default:
+                  description: Default response for POST /orders/client/go-to-step2
+              security:
+              - lambda-authorizer: []
+              x-amazon-apigateway-integration:
+                payloadFormatVersion: '2.0'
+                type: aws_proxy
+                httpMethod: POST
+                uri: arn:aws:apigateway:ca-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ca-central-1:812042964529:function:ordersService/invocations
+                connectionType: INTERNET
+          /orders/client/go-to-step3:
+            post:
+              responses:
+                default:
+                  description: Default response for POST /orders/client/go-to-step3
+              security:
+              - lambda-authorizer: []
+              x-amazon-apigateway-integration:
+                payloadFormatVersion: '2.0'
+                type: aws_proxy
+                httpMethod: POST
+                uri: arn:aws:apigateway:ca-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ca-central-1:812042964529:function:ordersService/invocations
+                connectionType: INTERNET
+        components:
+          securitySchemes:
+            lambda-authorizer:
+              type: apiKey
+              name: Authorization
+              in: header
+              x-amazon-apigateway-authorizer:
+                identitySource: $request.header.Authorization
+                authorizerUri: arn:aws:apigateway:ca-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ca-central-1:812042964529:function:authFunction/invocations
+                authorizerPayloadFormatVersion: '2.0'
+                authorizerResultTtlInSeconds: 1800
+                type: request
+                enableSimpleResponses: true
+          x-amazon-apigateway-integrations:
+            unusedIntegration_5fhaawf:
+              payloadFormatVersion: '2.0'
+              type: aws_proxy
+              httpMethod: POST
+              uri: arn:aws:apigateway:ca-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ca-central-1:812042964529:function:ordersService/invocations
+              connectionType: INTERNET
+        x-amazon-apigateway-cors:
+          allowMethods:
+          - DELETE
+          - GET
+          - POST
+          - PUT
+          allowHeaders:
+          - authorization
+          - x-apigateway-header
+          maxAge: 600
+          allowCredentials: true
+          allowOrigins:
+          - https://example.com
+        x-amazon-apigateway-importexport-version: '1.0'
   OrdersFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -51,6 +104,8 @@ Resources:
         GoToStep2:
           Type: HttpApi
           Properties:
+            ApiId:
+              Ref: OrdersApi
             Path: /orders/client/go-to-step2
             Method: post
             Auth:
@@ -58,38 +113,23 @@ Resources:
         GoToStep3:
           Type: HttpApi
           Properties:
+            ApiId:
+              Ref: OrdersApi
             Path: /orders/client/go-to-step3
             Method: post
             Auth:
               Authorizer: LambdaAuthorizer
     Metadata:
       SamResourceId: OrdersFunction
-  PlaceOrdersStateMachine:
-    Type: AWS::Serverless::Application
-    Properties:
-      Location: PlaceOrdersStateMachine/template.yaml
-      Parameters:
-        env:
-          Ref: env
-        OrdersFunctionArn:
-          Fn::GetAtt:
-          - OrdersFunction
-          - Arn
-        PaymentsFunctionArn:
-          Fn::GetAtt:
-          - OrdersFunction
-          - Arn
-        NotificationsFunctionArn:
-          Fn::GetAtt:
-          - OrdersFunction
-          - Arn
-    Metadata:
-      SamResourceId: PlaceOrdersStateMachine
 Outputs:
-  OrdersApi:
-    Description: API Gateway endpoint URL for Prod stage for Orders
+  OrdersApiUrl:
+    Description: URL of your OrdersApi endpoint
     Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/orders/
+      Fn::Sub: https://${OrdersApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${env}/
+  OrdersApiId:
+    Description: Api id of OrdersApi
+    Value:
+      Ref: OrdersApi
   OrdersFunction:
     Description: Orders Function ARN
     Value:

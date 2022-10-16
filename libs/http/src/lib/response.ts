@@ -1,4 +1,4 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 
 const corsHeaders = {
   // Change this to your domains
@@ -10,10 +10,10 @@ const corsHeaders = {
 
 export function httpResponse(
   data: Record<string, any>,
-  { statusCode = 200, ...rest }: Omit<APIGatewayProxyResult, 'body'> = {
+  { statusCode = 200, ...rest }: Omit<APIGatewayProxyStructuredResultV2, 'body'> = {
     statusCode: 200,
   }
-): APIGatewayProxyResult {
+): APIGatewayProxyStructuredResultV2 {
   return {
     body: JSON.stringify({ data }),
     statusCode,
@@ -27,10 +27,10 @@ export function httpResponse(
 
 export function httpError(
   error: any,
-  { statusCode = 400, ...rest }: Omit<APIGatewayProxyResult, 'body'> = {
+  { statusCode = 400, ...rest }: Omit<APIGatewayProxyStructuredResultV2, 'body'> = {
     statusCode: 200,
   }
-): APIGatewayProxyResult {
+): APIGatewayProxyStructuredResultV2 {
   return {
     body: JSON.stringify({ error }),
     statusCode,

@@ -15,13 +15,7 @@ interface Request {
     orderingUserRole: string;
 }
 
-export async function goToStep2(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-
-    const { body } = event;
-
-    if (!body) {
-        return sendFail('invalid request');
-    }
+export async function goToStep2(body: string): Promise<Record<string, any>> {
 
     let request: Request = null;
 
@@ -62,15 +56,5 @@ export async function goToStep2(event: APIGatewayProxyEvent): Promise<APIGateway
     
     await order.create(item);
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(item),
-    };
-}
-
-function sendFail(message: string): APIGatewayProxyResult {
-    return {
-        statusCode: 400,
-        body: JSON.stringify({ message }),
-    };
+    return item;
 }

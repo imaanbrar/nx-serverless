@@ -1,6 +1,17 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import {
+  APIGatewayProxyEventV2WithLambdaAuthorizer,
+  APIGatewayProxyStructuredResultV2,
+  Context,
+} from 'aws-lambda';
 import { goToStep2 } from './client/goto-step2';
 import { goToStep3 } from './client/goto-step3';
+import {
+  API_ORDERS_GO_TO_STEP_2,
+  API_ORDERS_GO_TO_STEP_3,
+  getControllers,
+} from '../../auth/authorizer/permissions';
+import { httpError, httpResponse } from '../../../libs/http/src/lib/response';
+import { IUserContext, UserContext } from '../../auth/authorizer/user-context';
 
 /**
  *
@@ -12,18 +23,30 @@ import { goToStep3 } from './client/goto-step3';
  *
  */
 
-export const lambdaHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
-    debugger;
-    console.log('lambda my start 123');
-    console.log(event);
-    console.log(context);
-    switch (event.httpMethod) {
-        case 'POST':
-            switch (event.path) {
-                case '/orders/client/go-to-step2':
-                    return await goToStep2(event);
-                case '/orders/client/go-to-step3':
-                    return await goToStep3(event);
-            }
+export const lambdaHandler = async (
+  event: APIGatewayProxyEventV2WithLambdaAuthorizer<IUserContext>,
+  context: Context
+): Promise<APIGatewayProxyStructuredResultV2> => {
+debugger;
+  console.log('orders lambda start');
+  console.log(event);
+  console.log(context);
+
+  UserContext.context = event.requestContext.authorizer;
+
+  const controller = getControllers(
+    event.requestContext.http.path,
+    event.requestContext.http.method
+  );
+
+  try {
+    switch (controller) {
+      case API_ORDERS_GO_TO_STEP_2:
+        return httpResponse(await goToStep2(event.body));
+      case API_ORDERS_GO_TO_STEP_3:
+        return httpResponse(await goToStep3(event.body));
     }
+  } catch (e) {
+    return httpError(e);
+  }
 };
