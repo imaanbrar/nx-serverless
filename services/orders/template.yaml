@@ -28,45 +28,7 @@ Resources:
       Properties:
         Description: Http API for Orders
         StageName: !Ref env
-        DefinitionBody:
-          info:
-            title:
-              Ref: AWS::StackName
-            version: "1.0"
-          openapi: 3.0.1
-          paths:
-            /orders/client/go-to-step2:
-              post:
-                responses: {}
-            /orders/client/go-to-step3:
-              post:
-                responses: {}
-        Auth:
-          DefaultAuthorizer: LambdaAuthorizer
-          Authorizers:
-            LambdaAuthorizer:
-              FunctionArn: !Ref AuthFunctionArn
-              FunctionInvokeRole: !Ref AuthFunctionInvokeRoleArn
-              Identity:
-                Headers:
-                  - Authorization
-                Context:
-                  - routeKey
-              AuthorizerPayloadFormatVersion: 2.0
-              EnableSimpleResponses: true
-        CorsConfiguration:
-          AllowOrigins:
-            - "https://example.com"
-          AllowHeaders:
-            - x-apigateway-header
-            - Authorization
-          AllowMethods:
-            - GET
-            - POST
-            - PUT
-            - DELETE
-          MaxAge: 600
-          AllowCredentials: true
+        DefinitionUri: ./api-def.yaml
   OrdersFunction:
     Type: AWS::Serverless::Function
     Properties:
