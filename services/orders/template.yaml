@@ -26,7 +26,6 @@ Resources:
   OrdersApi:
       Type: AWS::Serverless::HttpApi
       Properties:
-        Description: Http API for Orders
         StageName: !Ref env
         DefinitionUri: ./api-def.yaml
   OrdersFunction:
