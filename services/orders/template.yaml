@@ -27,32 +27,6 @@ Resources:
       Type: AWS::Serverless::HttpApi
       Properties:
         StageName: !Ref env
-        Auth:
-          DefaultAuthorizer: LambdaAuthorizer
-          Authorizers:
-            LambdaAuthorizer:
-              FunctionArn: !Ref AuthFunctionArn
-              FunctionInvokeRole: !Ref AuthFunctionInvokeRoleArn
-              Identity:
-                Headers:
-                  - Authorization
-                Context:
-                  - routeKey
-              AuthorizerPayloadFormatVersion: 2.0
-              EnableSimpleResponses: true
-        CorsConfiguration:
-          AllowOrigins:
-            - "https://example.com"
-          AllowHeaders:
-            - x-apigateway-header
-            - Authorization
-          AllowMethods:
-            - GET
-            - POST
-            - PUT
-            - DELETE
-          MaxAge: 600
-          AllowCredentials: true
         DefinitionBody:
           openapi: "3.0.1"
           info:
@@ -136,16 +110,12 @@ Resources:
             ApiId: !Ref OrdersApi
             Path: /orders/client/go-to-step2
             Method: post
-            Auth:
-              Authorizer: LambdaAuthorizer
         GoToStep3:
           Type: HttpApi
           Properties:
             ApiId: !Ref OrdersApi
             Path: /orders/client/go-to-step3
             Method: post 
-            Auth:
-              Authorizer: LambdaAuthorizer
   # PlaceOrdersStateMachine:
   #   Type: AWS::Serverless::Application
   #   Properties:
