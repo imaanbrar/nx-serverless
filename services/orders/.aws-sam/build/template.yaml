@@ -100,6 +100,7 @@ Resources:
       CodeUri: OrdersFunction
       Handler: services/orders/functions/index.lambdaHandler
       Runtime: nodejs14.x
+      Tracing: Active
       Events:
         GoToStep2:
           Type: HttpApi
@@ -108,8 +109,6 @@ Resources:
               Ref: OrdersApi
             Path: /orders/client/go-to-step2
             Method: post
-            Auth:
-              Authorizer: LambdaAuthorizer
         GoToStep3:
           Type: HttpApi
           Properties:
@@ -117,8 +116,6 @@ Resources:
               Ref: OrdersApi
             Path: /orders/client/go-to-step3
             Method: post
-            Auth:
-              Authorizer: LambdaAuthorizer
     Metadata:
       SamResourceId: OrdersFunction
 Outputs:
