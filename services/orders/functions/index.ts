@@ -32,12 +32,14 @@ debugger;
   console.log(event);
   console.log(context);
 
-  UserContext.context = event.requestContext.authorizer;
+  UserContext.context = event.requestContext.authorizer.lambda;
 
   const controller = getControllers(
     event.requestContext.http.path,
     event.requestContext.http.method 
   );
+
+  console.log(controller);
 
   try {
     switch (controller) {
