@@ -65,7 +65,7 @@ export const controllers: ApiController[] = [
 ]
 
 export function getControllers(path: string, method: string): ApiController {
-    return controllers.find(x => x.method === method && x.path === path);
+    return controllers.find(x => method.includes(x.method) && x.path === path);
 }
 
 export function enumFromStringValue<T> (enm: { [s: string]: T}, value: string): T | undefined {

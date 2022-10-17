@@ -36,7 +36,7 @@ debugger;
 
   const controller = getControllers(
     event.requestContext.http.path,
-    event.requestContext.http.method
+    event.requestContext.http.method 
   );
 
   try {
