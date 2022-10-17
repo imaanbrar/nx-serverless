@@ -1,5 +1,5 @@
 import {
-    APIGatewayRequestAuthorizerEvent,
+    APIGatewayRequestAuthorizerEventV2,
     APIGatewaySimpleAuthorizerResult
   } from "aws-lambda";
   import jwt, { JwtPayload } from "jsonwebtoken";
@@ -42,12 +42,14 @@ import {
 
   
   export async function lambdaHandler(
-    event: APIGatewayRequestAuthorizerEvent
+    event: APIGatewayRequestAuthorizerEventV2
   ): Promise<APIGatewaySimpleAuthorizerResult> {
     try {
       // get Authorization bearer token from headers and remove the 'Bearer' part
       console.log(event);
       const token = event?.headers?.["authorization"].replace('Bearer ', '');
+      const path = event.requestContext.http.path;
+      const method = event.requestContext.http.method;
   
       if (!token) {
         throw new Error("authorization token not found");
@@ -59,7 +61,7 @@ import {
       
       // perform authorization
       const userRoles = extractRolesFromToken(payload);
-      const authorizedRoles = controllers.find(x => x.path === event.path && x.method === event.httpMethod)?.Roles;
+      const authorizedRoles = controllers.find(x => path.includes(x.path) && x.method === method)?.Roles;
       const authorized = (userRoles.filter(userRole => authorizedRoles.includes(userRole))).length > 0;
 
       if (!authorized) {
