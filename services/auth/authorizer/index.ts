@@ -45,7 +45,8 @@ import {
     event: APIGatewayRequestAuthorizerEvent
   ): Promise<APIGatewaySimpleAuthorizerResult> {
     try {
-      // get Aiuthorization bearer token from headers and remove the 'Bearer' part
+      // get Authorization bearer token from headers and remove the 'Bearer' part
+      console.log(event);
       const token = event?.headers?.["Authorization"].replace('Bearer ', '');
   
       if (!token) {
