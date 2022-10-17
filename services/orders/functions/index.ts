@@ -5,6 +5,11 @@ import {
 } from 'aws-lambda';
 import { goToStep2 } from './client/goto-step2';
 import { goToStep3 } from './client/goto-step3';
+import middy from '@middy/core' ;
+import jsonBodyParser from '@middy/http-json-body-parser';
+import httpErrorHandler from '@middy/http-error-handler';
+import inputOutputLogger from '@middy/input-output-logger';
+import errorLogger from '@middy/error-logger';
 import {
   API_ORDERS_GO_TO_STEP_2,
   API_ORDERS_GO_TO_STEP_3,
@@ -23,16 +28,11 @@ import { IUserContext, UserContext } from '../../auth/authorizer/user-context';
  *
  */
 
-export const lambdaHandler = async (
+const lambdaHandler = async (
   event: APIGatewayProxyEventV2WithLambdaAuthorizer<IUserContext>,
   context: Context
 ): Promise<APIGatewayProxyStructuredResultV2> => {
-debugger;
-  console.log('orders lambda start');
-  console.log(event);
-  console.log(context);
-
-  UserContext.context = event.requestContext.authorizer.lambda;
+  UserContext.context = event.requestContext?.authorizer?.lambda;
 
   const controller = getControllers(
     event.requestContext.http.path,
@@ -52,3 +52,10 @@ debugger;
     return httpError(e);
   }
 };
+
+export const handler = middy(lambdaHandler)
+  .use(jsonBodyParser()) // parses the request body when it's a JSON and converts it to an object]
+  .use(inputOutputLogger())
+  .use(errorLogger())
+  .use(httpErrorHandler()) // handles common http errors and returns proper responses
+
