@@ -124,7 +124,7 @@ jobs:
         run: tsc -p services/orders
 
       - name: Copy package.json and run npm install
-        run: cp package.json ./dist/out-tsc/package.json && (cd ./dist/out-tsc npm install && cd ../../)
+        run: cp package.json ./dist/out-tsc/package.json && (cd ./dist/out-tsc && npm install && cd ../../)
 
       - name: Build resources
         run: sam build --template ${SAM_TEMPLATE} --use-container
