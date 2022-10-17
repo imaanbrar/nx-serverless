@@ -22,6 +22,8 @@ export async function goToStep2(body: string): Promise<Record<string, any>> {
     if (typeof body === 'string') request = JSON.parse(body) as Request;
     else request = body;
 
+    console.log(body);
+
     // retrieve username from auth
     const username = 'imaanvirbrar';
 
