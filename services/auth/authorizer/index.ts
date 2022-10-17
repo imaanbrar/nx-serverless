@@ -47,7 +47,7 @@ import {
     try {
       // get Authorization bearer token from headers and remove the 'Bearer' part
       console.log(event);
-      const token = event?.headers?.["Authorization"].replace('Bearer ', '');
+      const token = event?.headers?.["authorization"].replace('Bearer ', '');
   
       if (!token) {
         throw new Error("authorization token not found");
